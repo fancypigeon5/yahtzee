@@ -61,9 +61,9 @@ class Player:
                         stop_throwing = True
                         break
                     elif again == "y":
-                        print("What dice do you want to keep? \n")
-                        print("Enter the letters of the dice you want to keep \n")
-                        print("for example: ace")
+                        print("What dice do you want to keep?")
+                        print("Enter the letters of the dice you want to keep")
+                        print("for example: ace\n")
                         keep = input("Enter the dice to keep: \n")
                         set_aside = {}
                         for y in [*keep]:
