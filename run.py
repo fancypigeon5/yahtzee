@@ -28,6 +28,111 @@ class Player:
         self.name = name
         self.order = order
 
+    def calculated_places(self, throw):
+        possible_places = {}
+
+        for i in self.scoresheet.keys():
+            if self.scoresheet[i] == '':
+                x = 1
+                while x < 7:
+                    if i == f"{x}'s":
+                        possible_places[i] = 0
+                        for y in throw:
+                            if y == x:
+                                possible_places[i] += x
+                    x += 1
+                if i == "Three of a kind":
+                    three_of_a_kind = False
+                    x = 1
+                    while x < 7:
+                        if throw.count(x) >= 3:
+                            three_of_a_kind = True
+                            break
+                        x += 1
+                    if three_of_a_kind:
+                        possible_places[i] = sum(throw)
+                    else:
+                        possible_places[i] = "X"
+                elif i == "Four of a kind":
+                    four_of_a_kind = False
+                    x = 1
+                    while x < 7:
+                        if throw.count(x) >= 4:
+                            four_of_a_kind = True
+                            break
+                        x += 1
+                    if four_of_a_kind:
+                        possible_places[i] = sum(throw)
+                    else:
+                        possible_places[i] = "X"        
+                elif i == "Full House":
+                    full_house = False
+                    x = 1
+                    while x < 7:
+                        if throw.count(x) == 5:
+                            full_house = True
+                            break
+                        elif throw.count(x) == 3:
+                            y = 1
+                            while y < 7:
+                                if y != x and throw.count(y) >= 2:
+                                    full_house = True
+                                    break
+                                y += 1
+                        x += 1
+                    if full_house:
+                        possible_places[i] = 25
+                    else:
+                        possible_places[i] = "X"
+                elif i == "Small straight":
+                    small_straight = False
+                    x = 1
+                    while x < 4:
+                        y = 0
+                        while y < 4:
+                            if x + y in throw:
+                                small_straight = True
+                            else:
+                                small_straight = False
+                                break
+                            y += 1
+                        x += 1
+                    if small_straight:
+                        possible_places[i] = 30
+                    else:
+                        possible_places[i] = "X"
+                elif i == "Large straight":
+                    large_straight = False
+                    x = 1
+                    while x < 3:   
+                        y = 0
+                        while y < 5:
+                            if x + y in throw:
+                                large_straight = True
+                            else:
+                                large_straight = False
+                                break
+                            y += 1
+                        x += 1
+                    if large_straight:
+                        possible_places[i] = 40
+                    else:
+                        possible_places[i] = "X"
+                elif i == "YAHTZEE":
+                    yahtzee = False
+                    x = 1
+                    while x < 7:
+                        if throw.count(x) == 5:
+                            yahtzee = True
+                            break
+                        x += 1
+                    if yahtzee:
+                        possible_places[i] = 40
+                    else:
+                        possible_places[i] = "X"
+                    
+        return possible_places
+
     def throw(self, set_aside):
         """ 
         generates an object with keys a to e
@@ -74,6 +179,10 @@ class Player:
                 if stop_throwing:
                     break
             i += 1
+        possible_places = self.calculated_places(list(roll.values()))
+        print("where do you want to fill it in?")
+        for i in possible_places:
+            print(f"{i} : {possible_places[i]}")
 
 jules = Player("jules", 1)
 
