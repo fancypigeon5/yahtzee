@@ -96,6 +96,8 @@ class Player:
                                 small_straight = False
                                 break
                             y += 1
+                        if small_straight == True:
+                            break
                         x += 1
                     if small_straight:
                         possible_places[i] = 30
@@ -113,6 +115,8 @@ class Player:
                                 large_straight = False
                                 break
                             y += 1
+                        if large_straight == True:
+                            break
                         x += 1
                     if large_straight:
                         possible_places[i] = 40
@@ -148,6 +152,16 @@ class Player:
                 throw[i] = set_aside[i]
         return throw
 
+    def print_scoresheet(self):
+        """
+        prints the scoresheet
+        """
+        for i in self.scoresheet:
+            if self.scoresheet[i] != "":
+                print("%-20s| %-5i" % (i, self.scoresheet[i]))
+            else:
+                print("%-20s| %-5s" % (i, self.scoresheet[i]))
+
     def turn(self):
         """
         Starts a players turn
@@ -177,7 +191,7 @@ class Player:
                                 set_aside = {}
                                 valid = True
                                 for y in [*keep]:
-                                    if i in roll.kes():
+                                    if y in roll.keys():
                                         set_aside[y] = roll[y]
                                     else:
                                         valid = False
@@ -201,11 +215,11 @@ class Player:
             print("%-2s| %-20s : %-5i" % (i, choices[i][0], choices[i][1]))
         while True:
             fill = input("Enter where to fill it in: \n")
-            if fill in choises.keys():
+            if fill in choices.keys():
                 key = choices[fill][0]
                 self.scoresheet[key] = choices[fill][1]
                 break
-        
+        self.print_scoresheet()
 
 
 jules = Player("jules", 1)
