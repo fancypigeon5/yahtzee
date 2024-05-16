@@ -1,32 +1,11 @@
 import random
+import copy
 
 class Player:
     """Creates an instance of a player"""
-    scoresheet = {
-        "1's" : "",
-        "2's" : "",
-        "3's" : "",
-        "4's" : "",
-        "5's" : "",
-        "6's" : "",
-        "Sum top" : "",
-        "Bonus (if sum > 63)" : "",
-        "Total top" : "",
-        "Three of a kind" : "",
-        "Four of a kind" : "",
-        "Full House" : "",
-        "Small straight" : "",
-        "Large straight" : "",
-        "YAHTZEE" : "",
-        "YAHTZEE Bonus" : "",
-        "Chance" : "",
-        "Sum bottom" : "",
-        "Total" : ""
-    }
-
-    def __init__(self, name, order):
+    def __init__(self, name, scoresheet):
         self.name = name
-        self.order = order
+        self.scoresheet = scoresheet
 
     def calculated_places(self, throw):
         possible_places = {}
@@ -169,6 +148,8 @@ class Player:
         set_aside = {}
         roll = {}
         i = 0
+        print(f"{self.name}'s turn")
+        input("press any key to start rolling")
         while i < 3:
             roll = self.throw(set_aside)
             print("your throw was: \n"),
@@ -220,8 +201,51 @@ class Player:
                 self.scoresheet[key] = choices[fill][1]
                 break
         self.print_scoresheet()
+        input("press any key to continue to next player")
 
+def start_game():
+    num_of_players = 0
+    players = []
+    scoresheet_template = {
+        "1's" : "",
+        "2's" : "",
+        "3's" : "",
+        "4's" : "",
+        "5's" : "",
+        "6's" : "",
+        "Sum top" : "",
+        "Bonus (if sum > 63)" : "",
+        "Total top" : "",
+        "Three of a kind" : "",
+        "Four of a kind" : "",
+        "Full House" : "",
+        "Small straight" : "",
+        "Large straight" : "",
+        "YAHTZEE" : "",
+        "YAHTZEE Bonus" : "",
+        "Chance" : "",
+        "Sum bottom" : "",
+        "Total" : ""
+    }
+    while True:
+        num_of_players = input("how many players are there? \n")
+        try:
+            num_of_players = int(num_of_players)
+            break
+        except ValueError:
+            print("That's not an int!")
+    i = 0
+    while i < num_of_players:
+        name = input(f"Enter player{i + 1} name? \n")
+        scoresheet = copy.deepcopy(scoresheet_template)
+        players.append(Player(name, scoresheet))
+        i += 1
+    total_rounds = 13
+    round = 0
+    while round < total_rounds:
+        print(players)
+        for i in players:
+            i.turn()
+        round += 1
 
-jules = Player("jules", 1)
-
-jules.turn()
+start_game()
