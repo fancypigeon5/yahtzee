@@ -29,10 +29,47 @@ class Player:
         self.order = order
 
     def throw(self, set_aside):
+        """ 
+        generates an object with keys a to e
+        and random values between 1 and 6
+        """
         throw = {}
-        for i in ["a", "b", "c", "d", "e", "f"]:
+        for i in ["a", "b", "c", "d", "e"]:
             if i not in set_aside:
-                throw[i] = random.randrange(1, 6)
+                throw[i] = random.randrange(1, 7)
             else:
                 throw[i] = set_aside[i]
         return throw
+
+    def turn(self):
+        """
+        Starts a players turn
+        """
+        set_aside = {}
+        roll = {}
+        i = 0
+        while i < 3:
+            roll = self.throw(set_aside)
+            print("your throw was: \n"),
+            for x in roll:
+                print(f"{x} : [{roll[x]}] \n")
+            if i < 2:
+                no = False
+                while True:
+                    again = input("Would you like to throw again? y/n: \n")
+                    if again == "n":
+                        break
+                    elif again == "y":
+                        print("What dice do you want to keep? \n")
+                        print("Enter the letters of the dice you want to keep \n")
+                        print("for example: ace")
+                        keep = input("Enter the dice to keep: \n")
+                        set_aside = {}
+                        for y in [*keep]:
+                            set_aside[y] = roll[y]
+                        break
+                    else:
+                        print("please enter y or n")
+                if no:
+                    break
+            i += 1
