@@ -1,3 +1,5 @@
+import random
+
 class Player:
     """Creates an instance of a player"""
     scoresheet = {
@@ -25,3 +27,12 @@ class Player:
     def __init__(self, name, order):
         self.name = name
         self.order = order
+
+    def throw(self, set_aside):
+        throw = {}
+        for i in ["a", "b", "c", "d", "e", "f"]:
+            if i not in set_aside:
+                throw[i] = random.randrange(1, 6)
+            else:
+                throw[i] = set_aside[i]
+        return throw
