@@ -140,7 +140,15 @@ class Player:
         for i in ["1's", "2's", "3's", "4's", "5's", "6's"]:
             if self.scoresheet[i] != "":
                 sum_top += self.scoresheet[i]
-        for i in ["Three of a kind", "Four of a kind", "Full House", "Small straight", "Large straight", "YAHTZEE", "Chance"]:
+        for i in [
+                "Three of a kind",
+                 "Four of a kind", 
+                 "Full House", 
+                 "Small straight", 
+                 "Large straight", 
+                 "YAHTZEE", 
+                 "Chance"
+                 ]:
             if self.scoresheet[i] != "":
                 sum_bottom += self.scoresheet[i]
         if sum_top >= 63:
