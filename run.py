@@ -135,6 +135,22 @@ class Player:
         """
         prints the scoresheet
         """
+        sum_top = 0
+        sum_bottom = 0
+        for i in ["1's", "2's", "3's", "4's", "5's", "6's"]:
+            if self.scoresheet[i] != "":
+                sum_top += self.scoresheet[i]
+        for i in ["Three of a kind", "Four of a kind", "Full House", "Small straight", "Large straight", "YAHTZEE", "Chance"]:
+            if self.scoresheet[i] != "":
+                sum_bottom += self.scoresheet[i]
+        if sum_top >= 63:
+            self.scoresheet["Bonus (if sum > 63)"] = 35
+        else:
+            self.scoresheet["Bonus (if sum > 63)"] = 0
+        self.scoresheet["Sum top"] = sum_top
+        self.scoresheet["Total top"] = self.scoresheet["Sum top"] + self.scoresheet["Bonus (if sum > 63)"]
+        self.scoresheet["Sum bottom"] = sum_bottom
+        self.scoresheet["Total"] = self.scoresheet["Sum bottom"] + self.scoresheet["Total top"]
         for i in self.scoresheet:
             if self.scoresheet[i] != "":
                 print("%-20s| %-5i" % (i, self.scoresheet[i]))
