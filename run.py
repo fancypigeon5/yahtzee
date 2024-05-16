@@ -52,7 +52,7 @@ class Player:
                     if three_of_a_kind:
                         possible_places[i] = sum(throw)
                     else:
-                        possible_places[i] = "X"
+                        possible_places[i] = 0
                 elif i == "Four of a kind":
                     four_of_a_kind = False
                     x = 1
@@ -64,7 +64,7 @@ class Player:
                     if four_of_a_kind:
                         possible_places[i] = sum(throw)
                     else:
-                        possible_places[i] = "X"        
+                        possible_places[i] = 0        
                 elif i == "Full House":
                     full_house = False
                     x = 1
@@ -83,7 +83,7 @@ class Player:
                     if full_house:
                         possible_places[i] = 25
                     else:
-                        possible_places[i] = "X"
+                        possible_places[i] = 0
                 elif i == "Small straight":
                     small_straight = False
                     x = 1
@@ -100,7 +100,7 @@ class Player:
                     if small_straight:
                         possible_places[i] = 30
                     else:
-                        possible_places[i] = "X"
+                        possible_places[i] = 0
                 elif i == "Large straight":
                     large_straight = False
                     x = 1
@@ -117,7 +117,7 @@ class Player:
                     if large_straight:
                         possible_places[i] = 40
                     else:
-                        possible_places[i] = "X"
+                        possible_places[i] = 0
                 elif i == "YAHTZEE":
                     yahtzee = False
                     x = 1
@@ -129,7 +129,9 @@ class Player:
                     if yahtzee:
                         possible_places[i] = 40
                     else:
-                        possible_places[i] = "X"
+                        possible_places[i] = 0
+                elif i == "Chance":
+                    possible_places[i] = sum(throw)
                     
         return possible_places
 
@@ -157,7 +159,7 @@ class Player:
             roll = self.throw(set_aside)
             print("your throw was: \n"),
             for x in roll:
-                print(f"{x} : [{roll[x]}] \n")
+                print(f"{x} : [{roll[x]}]")
             if i < 2:
                 stop_throwing = False
                 while True:
@@ -180,9 +182,15 @@ class Player:
                     break
             i += 1
         possible_places = self.calculated_places(list(roll.values()))
-        print("where do you want to fill it in?")
+        choices = {}
+        x = 0
         for i in possible_places:
-            print(f"{i} : {possible_places[i]}")
+            key = "abcdefghijklmnopqrstuvwxyz"[x]
+            choices[key] = [i, possible_places[i]]
+            x += 1
+        print("where do you want to fill it in?")
+        for i in choices:
+            print("%-2s| %-20s : %-5i" % (i, choices[i][0], choices[i][1]))
 
 jules = Player("jules", 1)
 
