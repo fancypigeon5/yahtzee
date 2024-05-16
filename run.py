@@ -171,10 +171,18 @@ class Player:
                         print("What dice do you want to keep?")
                         print("Enter the letters of the dice you want to keep")
                         print("for example: ace\n")
-                        keep = input("Enter the dice to keep: \n")
-                        set_aside = {}
-                        for y in [*keep]:
-                            set_aside[y] = roll[y]
+                        while True:
+                            keep = input("Enter the dice to keep: \n")
+                            if len(keep) < 6:
+                                set_aside = {}
+                                valid = True
+                                for y in [*keep]:
+                                    if i in roll.kes():
+                                        set_aside[y] = roll[y]
+                                    else:
+                                        valid = False
+                                if valid:
+                                    break
                         break
                     else:
                         print("please enter y or n")
@@ -191,6 +199,14 @@ class Player:
         print("where do you want to fill it in?")
         for i in choices:
             print("%-2s| %-20s : %-5i" % (i, choices[i][0], choices[i][1]))
+        while True:
+            fill = input("Enter where to fill it in: \n")
+            if fill in choises.keys():
+                key = choices[fill][0]
+                self.scoresheet[key] = choices[fill][1]
+                break
+        
+
 
 jules = Player("jules", 1)
 
