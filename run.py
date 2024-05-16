@@ -54,10 +54,11 @@ class Player:
             for x in roll:
                 print(f"{x} : [{roll[x]}] \n")
             if i < 2:
-                no = False
+                stop_throwing = False
                 while True:
                     again = input("Would you like to throw again? y/n: \n")
                     if again == "n":
+                        stop_throwing = True
                         break
                     elif again == "y":
                         print("What dice do you want to keep? \n")
@@ -70,6 +71,10 @@ class Player:
                         break
                     else:
                         print("please enter y or n")
-                if no:
+                if stop_throwing:
                     break
             i += 1
+
+jules = Player("jules", 1)
+
+jules.turn()
