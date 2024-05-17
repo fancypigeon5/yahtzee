@@ -6,10 +6,16 @@ class Player:
     def __init__(self, name, scoresheet):
         self.name = name
         self.scoresheet = scoresheet
+        self.yahtzee = False
 
     def calculated_places(self, throw):
         possible_places = {}
-
+        x = 1
+        while x < 7:
+            if throw.count(x) == 5:
+                self.yahtzee = True
+                break
+            x += 1
         for i in self.scoresheet.keys():
             if self.scoresheet[i] == '':
                 x = 1
@@ -110,7 +116,7 @@ class Player:
                             break
                         x += 1
                     if yahtzee:
-                        possible_places[i] = 40
+                        possible_places[i] = 50 
                     else:
                         possible_places[i] = 0
                 elif i == "Chance":
@@ -147,6 +153,7 @@ class Player:
                  "Small straight", 
                  "Large straight", 
                  "YAHTZEE", 
+                 "YAHTZEE Bonus",
                  "Chance"
                  ]:
             if self.scoresheet[i] != "":
@@ -172,8 +179,10 @@ class Player:
         set_aside = {}
         roll = {}
         i = 0
-        print(f"{self.name}'s turn")
+        print(f"{self.name}'s turn, your scoresheet is")
+        self.print_scoresheet()
         input("press any key to start rolling")
+        self.yahtzee = False
         while i < 3:
             roll = self.throw(set_aside)
             print("your throw was: \n"),
@@ -181,33 +190,32 @@ class Player:
                 print(f"{x} : [{roll[x]}]")
             if i < 2:
                 stop_throwing = False
+                print("What dice do you want to keep?")
+                print("Enter the letters of the dice you want to keep")
+                print("for example: ace")
+                print("If you do not want to throw again, enter x \n")
                 while True:
-                    again = input("Would you like to throw again? y/n: \n")
-                    if again == "n":
+                    keep = input("Enter the dice to keep: \n")
+                    if keep == "x":
                         stop_throwing = True
                         break
-                    elif again == "y":
-                        print("What dice do you want to keep?")
-                        print("Enter the letters of the dice you want to keep")
-                        print("for example: ace\n")
-                        while True:
-                            keep = input("Enter the dice to keep: \n")
-                            if len(keep) < 6:
-                                set_aside = {}
-                                valid = True
-                                for y in [*keep]:
-                                    if y in roll.keys():
-                                        set_aside[y] = roll[y]
-                                    else:
-                                        valid = False
-                                if valid:
-                                    break
-                        break
+                    elif len(keep) < 6:
+                        set_aside_temp = {}
+                        valid = True
+                        for y in [*keep]:
+                            if y in roll.keys():
+                                set_aside_temp[y] = roll[y]
+                            else:
+                                valid = False
+                        if valid:
+                            set_aside = set_aside_temp
+                            break
                     else:
-                        print("please enter y or n")
+                        print("please enter something valid")
                 if stop_throwing:
                     break
             i += 1
+        input("Press any key to choose where to fill in your score")
         possible_places = self.calculated_places(list(roll.values()))
         choices = {}
         x = 0
@@ -222,10 +230,16 @@ class Player:
             fill = input("Enter where to fill it in: \n")
             if fill in choices.keys():
                 key = choices[fill][0]
+                if self.yahtzee and key != "YAHTZEE":
+                    if self.scoresheet["YAHTZEE Bonus"] == "":
+                        self.scoresheet["YAHTZEE Bonus"] = 100
+                    elif self.scoresheet["YAHTZEE Bonus"] < 300:
+                        self.scoresheet["YAHTZEE Bonus"] += 100
                 self.scoresheet[key] = choices[fill][1]
                 break
+        
         self.print_scoresheet()
-        input("press any key to continue to next player")
+        input("press any key to continue")
 
 def start_game():
     num_of_players = 0
@@ -267,9 +281,12 @@ def start_game():
     total_rounds = 13
     round = 0
     while round < total_rounds:
-        print(players)
         for i in players:
             i.turn()
         round += 1
+    scores = {}
+    for i in players:
+        scores[i.name] = i.scoresheet["Total"]
+    print(f"The winner is {max(scores, key=scores.get)} with {max(scores.values())} points")
 
 start_game()
