@@ -333,7 +333,7 @@ def start_game():
         scoresheet = copy.deepcopy(scoresheet_template)
         players.append(Player(name, scoresheet))
         i += 1
-    total_rounds = 2
+    total_rounds = 13
     round = 0
     clear()
     instructions()
