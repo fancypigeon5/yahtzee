@@ -1,14 +1,52 @@
 import random
 import copy
 
+def clear():
+    """
+    Clears the screen to allow for the next content to be displayed.
+    Copied from Rick's https://github.com/RickofManc/vv-pizzas/blob/main/run.py.
+    """
+    print('\033c')
+
+def instructions():
+    """ 
+    Prints the instructions of the game
+    """
+    print("Rules: \n")
+    print("1. Roll all five dice.")
+    print("2. After the first roll, you can keep any number of dice and re-roll the rest.")
+    print("3. You can do this two more times for a total of three rolls per turn.")
+    print("4. Choose a category to score. \n")
+    print("For more rules: https://en.wikipedia.org/wiki/Yahtzee")
+    input("Press enter to continue")
+
 class Player:
-    """Creates an instance of a player"""
+    """
+    Creates an instance of a player
+    """
     def __init__(self, name, scoresheet):
+        """ 
+        Creates instance args
+
+        Args:
+            name: str: name of player
+            scoresheet: dict str -> str: template of the scoresheet
+        """
         self.name = name
         self.scoresheet = scoresheet
         self.yahtzee = False
 
     def calculated_places(self, throw):
+        """
+        Calculates the values of the throw
+        for each empty category.
+
+        Args:
+            throw: list of int: the values of the dice
+        
+        Returns: 
+            dict of str -> int: name of possible categories -> points the throw gets. 
+        """
         possible_places = {}
         x = 1
         while x < 7:
@@ -126,8 +164,14 @@ class Player:
 
     def throw(self, set_aside):
         """ 
-        generates an object with keys a to e
-        and random values between 1 and 6
+        Generates throwing 5 dice (except the set aside) with
+        random values between 1 and 6
+
+        Args:
+            set_aside: dict of str -> int: dice to set aside (die id -> die value)
+        
+        Returns:
+            dict of str -> int: dice throw (die id -> die value)
         """
         throw = {}
         for i in ["a", "b", "c", "d", "e"]:
@@ -166,11 +210,14 @@ class Player:
         self.scoresheet["Total top"] = self.scoresheet["Sum top"] + self.scoresheet["Bonus (if sum > 63)"]
         self.scoresheet["Sum bottom"] = sum_bottom
         self.scoresheet["Total"] = self.scoresheet["Sum bottom"] + self.scoresheet["Total top"]
+        clear()
+        print(f"{self.name}'s scoresheet: \n")
         for i in self.scoresheet:
             if self.scoresheet[i] != "":
                 print("%-20s| %-5i" % (i, self.scoresheet[i]))
             else:
                 print("%-20s| %-5s" % (i, self.scoresheet[i]))
+        print('\n')
 
     def turn(self):
         """
@@ -179,23 +226,24 @@ class Player:
         set_aside = {}
         roll = {}
         i = 0
-        print(f"{self.name}'s turn, your scoresheet is")
         self.print_scoresheet()
-        input("press any key to start rolling")
+        input("press enter to start rolling")
         self.yahtzee = False
         while i < 3:
+            self.print_scoresheet()
             roll = self.throw(set_aside)
             print("your throw was: \n"),
             for x in roll:
                 print(f"{x} : [{roll[x]}]")
             if i < 2:
                 stop_throwing = False
+                print("")
                 print("What dice do you want to keep?")
                 print("Enter the letters of the dice you want to keep")
                 print("for example: ace")
                 print("If you do not want to throw again, enter x \n")
                 while True:
-                    keep = input("Enter the dice to keep: \n")
+                    keep = input("Enter the dice to keep: \n").strip()
                     if keep == "x":
                         stop_throwing = True
                         break
@@ -216,6 +264,7 @@ class Player:
                     break
             i += 1
         input("Press any key to choose where to fill in your score")
+        clear()
         possible_places = self.calculated_places(list(roll.values()))
         choices = {}
         x = 0
@@ -227,7 +276,7 @@ class Player:
         for i in choices:
             print("%-2s| %-20s : %-5i" % (i, choices[i][0], choices[i][1]))
         while True:
-            fill = input("Enter where to fill it in: \n")
+            fill = input("Enter where to fill it in (ex: b): \n").strip()
             if fill in choices.keys():
                 key = choices[fill][0]
                 if self.yahtzee and key != "YAHTZEE":
@@ -240,8 +289,12 @@ class Player:
         
         self.print_scoresheet()
         input("press any key to continue")
+        clear()
 
 def start_game():
+    """ 
+    Plays the game
+    """
     num_of_players = 0
     players = []
     scoresheet_template = {
@@ -265,6 +318,7 @@ def start_game():
         "Sum bottom" : "",
         "Total" : ""
     }
+    clear()
     while True:
         num_of_players = input("how many players are there? \n")
         try:
@@ -273,13 +327,16 @@ def start_game():
         except ValueError:
             print("That's not an int!")
     i = 0
+    
     while i < num_of_players:
         name = input(f"Enter player{i + 1} name? \n")
         scoresheet = copy.deepcopy(scoresheet_template)
         players.append(Player(name, scoresheet))
         i += 1
-    total_rounds = 13
+    total_rounds = 2
     round = 0
+    clear()
+    instructions()
     while round < total_rounds:
         for i in players:
             i.turn()
@@ -287,6 +344,10 @@ def start_game():
     scores = {}
     for i in players:
         scores[i.name] = i.scoresheet["Total"]
-    print(f"The winner is {max(scores, key=scores.get)} with {max(scores.values())} points")
+    winner = max(scores, key=scores.get)
+    for i in players:
+        if i.name == winner:
+            i.print_scoresheet()
+    print(f"The winner is {winner} with {max(scores.values())} points")
 
 start_game()
