@@ -51,4 +51,30 @@ For each player a new instance is created containing a scoresheet, name and all 
 
 ## Testing
 
+The following tests have been done manually to make sure everything works.
+
+- Run a game and make sure it stops after 13 rounds.
+- Make sure the scoresheet is updated after each turn.
+- Try invalid inputs: the game should ask you to input correct values.
+- test both the terminal and the heroku deployed version.
+
+The code was also put through this [PEP8 validator](https://pep8ci.herokuapp.com/#)
+and passed all test without problem
+
 ## Deployment
+
+For this project the Code Institute mock terminal for heroku was used.
+
+### How to deploy
+
+- Fork or Clone this repository
+- Create a heroku app
+- Add the buildpacks for Python and NodeJS in that order
+- Link the app to the repository
+- Deploy
+
+# Credits
+
+- Code Institute for the template.
+- Wikipedia for the rules of Yahtzee
+- Stackoverflow for when experiencing a problem, this site was very useful to find others experiencing simular issues.
