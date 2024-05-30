@@ -45,7 +45,9 @@ choosing dice to keep and/or where to fill in the throw is done by writing the c
 
 ## Data Model
 
-
+For this project I used an object oriented approach.
+There is a class Player.
+For each player a new instance is created containing a scoresheet, name and all the necessary methods for running a turn.
 
 ## Testing
 
