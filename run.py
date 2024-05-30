@@ -1,31 +1,42 @@
 import random
 import copy
 
+
 def clear():
     """
     Clears the screen to allow for the next content to be displayed.
-    Copied from Rick's https://github.com/RickofManc/vv-pizzas/blob/main/run.py.
+    Copied from Rick's
+    https://github.com/RickofManc/vv-pizzas/blob/main/run.py.
     """
-    print('\033c')
+    print("\033c")
+
 
 def instructions():
-    """ 
+    """
     Prints the instructions of the game
     """
     print("Rules: \n")
     print("1. Roll all five dice.")
-    print("2. After the first roll, you can keep any number of dice and re-roll the rest.")
-    print("3. You can do this two more times for a total of three rolls per turn.")
+    print(
+        "2. After the first roll, \
+        you can keep any number of dice and re-roll the rest."
+    )
+    print(
+        "3. You can do this two more times \
+        for a total of three rolls per turn."
+    )
     print("4. Choose a category to score. \n")
     print("For more rules: https://en.wikipedia.org/wiki/Yahtzee")
     input("Press enter to continue")
+
 
 class Player:
     """
     Creates an instance of a player
     """
+
     def __init__(self, name, scoresheet):
-        """ 
+        """
         Creates instance args
 
         Args:
@@ -43,9 +54,10 @@ class Player:
 
         Args:
             throw: list of int: the values of the dice
-        
-        Returns: 
-            dict of str -> int: name of possible categories -> points the throw gets. 
+
+        Returns:
+            dict of str -> int:
+                name of possible categories -> points the throw gets.
         """
         possible_places = {}
         x = 1
@@ -55,7 +67,7 @@ class Player:
                 break
             x += 1
         for i in self.scoresheet.keys():
-            if self.scoresheet[i] == '':
+            if self.scoresheet[i] == "":
                 x = 1
                 while x < 7:
                     if i == f"{x}'s":
@@ -87,7 +99,7 @@ class Player:
                     if four_of_a_kind:
                         possible_places[i] = sum(throw)
                     else:
-                        possible_places[i] = 0        
+                        possible_places[i] = 0
                 elif i == "Full House":
                     full_house = False
                     x = 1
@@ -119,7 +131,7 @@ class Player:
                                 small_straight = False
                                 break
                             y += 1
-                        if small_straight == True:
+                        if small_straight is True:
                             break
                         x += 1
                     if small_straight:
@@ -129,7 +141,7 @@ class Player:
                 elif i == "Large straight":
                     large_straight = False
                     x = 1
-                    while x < 3:   
+                    while x < 3:
                         y = 0
                         while y < 5:
                             if x + y in throw:
@@ -138,7 +150,7 @@ class Player:
                                 large_straight = False
                                 break
                             y += 1
-                        if large_straight == True:
+                        if large_straight is True:
                             break
                         x += 1
                     if large_straight:
@@ -154,22 +166,23 @@ class Player:
                             break
                         x += 1
                     if yahtzee:
-                        possible_places[i] = 50 
+                        possible_places[i] = 50
                     else:
                         possible_places[i] = 0
                 elif i == "Chance":
                     possible_places[i] = sum(throw)
-                    
+
         return possible_places
 
     def throw(self, set_aside):
-        """ 
+        """
         Generates throwing 5 dice (except the set aside) with
         random values between 1 and 6
 
         Args:
-            set_aside: dict of str -> int: dice to set aside (die id -> die value)
-        
+            set_aside: dict of str -> int:
+                dice to set aside (die id -> die value)
+
         Returns:
             dict of str -> int: dice throw (die id -> die value)
         """
@@ -191,15 +204,15 @@ class Player:
             if self.scoresheet[i] != "":
                 sum_top += self.scoresheet[i]
         for i in [
-                "Three of a kind",
-                 "Four of a kind", 
-                 "Full House", 
-                 "Small straight", 
-                 "Large straight", 
-                 "YAHTZEE", 
-                 "YAHTZEE Bonus",
-                 "Chance"
-                 ]:
+            "Three of a kind",
+            "Four of a kind",
+            "Full House",
+            "Small straight",
+            "Large straight",
+            "YAHTZEE",
+            "YAHTZEE Bonus",
+            "Chance",
+        ]:
             if self.scoresheet[i] != "":
                 sum_bottom += self.scoresheet[i]
         if sum_top >= 63:
@@ -207,9 +220,13 @@ class Player:
         else:
             self.scoresheet["Bonus (if sum > 63)"] = 0
         self.scoresheet["Sum top"] = sum_top
-        self.scoresheet["Total top"] = self.scoresheet["Sum top"] + self.scoresheet["Bonus (if sum > 63)"]
+        self.scoresheet["Total top"] = (
+            self.scoresheet["Sum top"] + self.scoresheet["Bonus (if sum > 63)"]
+        )
         self.scoresheet["Sum bottom"] = sum_bottom
-        self.scoresheet["Total"] = self.scoresheet["Sum bottom"] + self.scoresheet["Total top"]
+        self.scoresheet["Total"] = (
+            self.scoresheet["Sum bottom"] + self.scoresheet["Total top"]
+        )
         clear()
         print(f"{self.name}'s scoresheet: \n")
         for i in self.scoresheet:
@@ -217,7 +234,7 @@ class Player:
                 print("%-20s| %-5i" % (i, self.scoresheet[i]))
             else:
                 print("%-20s| %-5s" % (i, self.scoresheet[i]))
-        print('\n')
+        print("\n")
 
     def turn(self):
         """
@@ -286,37 +303,38 @@ class Player:
                         self.scoresheet["YAHTZEE Bonus"] += 100
                 self.scoresheet[key] = choices[fill][1]
                 break
-        
+
         self.print_scoresheet()
         input("press any key to continue")
         clear()
 
+
 def start_game():
-    """ 
+    """
     Plays the game
     """
     num_of_players = 0
     players = []
     scoresheet_template = {
-        "1's" : "",
-        "2's" : "",
-        "3's" : "",
-        "4's" : "",
-        "5's" : "",
-        "6's" : "",
-        "Sum top" : "",
-        "Bonus (if sum > 63)" : "",
-        "Total top" : "",
-        "Three of a kind" : "",
-        "Four of a kind" : "",
-        "Full House" : "",
-        "Small straight" : "",
-        "Large straight" : "",
-        "YAHTZEE" : "",
-        "YAHTZEE Bonus" : "",
-        "Chance" : "",
-        "Sum bottom" : "",
-        "Total" : ""
+        "1's": "",
+        "2's": "",
+        "3's": "",
+        "4's": "",
+        "5's": "",
+        "6's": "",
+        "Sum top": "",
+        "Bonus (if sum > 63)": "",
+        "Total top": "",
+        "Three of a kind": "",
+        "Four of a kind": "",
+        "Full House": "",
+        "Small straight": "",
+        "Large straight": "",
+        "YAHTZEE": "",
+        "YAHTZEE Bonus": "",
+        "Chance": "",
+        "Sum bottom": "",
+        "Total": "",
     }
     clear()
     while True:
@@ -327,7 +345,7 @@ def start_game():
         except ValueError:
             print("That's not an int!")
     i = 0
-    
+
     while i < num_of_players:
         name = input(f"Enter player{i + 1} name? \n")
         scoresheet = copy.deepcopy(scoresheet_template)
@@ -349,5 +367,6 @@ def start_game():
         if i.name == winner:
             i.print_scoresheet()
     print(f"The winner is {winner} with {max(scores.values())} points")
+
 
 start_game()
