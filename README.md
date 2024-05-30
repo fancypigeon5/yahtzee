@@ -6,6 +6,8 @@ The aim of the program is to let people enjoy a game of Yahtzee together.
 
 [Here is the live version of the site](https://yahtzee-1-32ffa45a6b88.herokuapp.com)
 
+![a mockup of the site on different screens](readme-assets/mockup.png)
+
 ## How to play
 
 Yahtzee is a classic dice game where you get three throws each turn to roll five dice to get a desired outcome.
@@ -22,26 +24,35 @@ choosing dice to keep and/or where to fill in the throw is done by writing the c
     - Choose how many players are participating.
     - Every player can enter their name or nickname.
 
+![showing the choosing of number of players and names](readme-assets/players.png)
+
 - __Dice rolls__
 
     - By rolling the dice 5 random numbers between 1 and 6 are generated and displayed as dice.
     - After rolling the player can decide what dice to keep (they are not rolled again in the next roll).
     - If a player is satisfied with the roll all next rolls of the turn can be skipped by entering x in the input field
 
+![showing a dice roll and the choise of dice to keep](readme-assets/dice-roll.png)
+
 - __Choosing a category for the roll__
 
     - After all 3 throws (or less if skipped) players will be presented with all available categories for this throw.
     - The total score for each category is calculated automaticly and displayed.
+
+![showing the choise of category](readme-assets/categories.png)
 
 - __Scoresheet__
 
     - The scoresheets are kept and displayed on a players turn.
     - All totals (and top bonus, yahtzee bonus) are calculated automaticly and updated with each turn.
 
+![showing the scoresheet](readme-assets/scoresheet.png)
+
 - __Input__
 
     - All the inputs are validated after entering
 
+![showing the input validation](readme-assets/validation.png)
 
 ## Data Model
 
